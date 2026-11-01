@@ -146,12 +146,7 @@ module.exports = [
     // to run editor examples
     defaultsDeep({}, base, {
         entry: {
-            'editor': './src/playground/editor.jsx',
-            'player': './src/playground/player.jsx',
-            'fullscreen': './src/playground/fullscreen.jsx',
-            'embed': './src/playground/embed.jsx',
-            'addon-settings': './src/playground/addon-settings.jsx',
-            'credits': './src/playground/credits/credits.jsx'
+            'editor': './src/playground/editor.jsx'
         },
         output: {
             path: path.resolve(__dirname, 'build')
@@ -190,43 +185,8 @@ module.exports = [
                 chunks: ['editor'],
                 template: 'src/playground/index.ejs',
                 filename: 'editor.html',
-                title: `${APP_NAME} - Run Scratch projects faster`,
+                title: 'PythonIDE',
                 isEditor: true,
-                ...htmlWebpackPluginCommon
-            }),
-            new HtmlWebpackPlugin({
-                chunks: ['player'],
-                template: 'src/playground/index.ejs',
-                filename: 'index.html',
-                title: `${APP_NAME} - Run Scratch projects faster`,
-                ...htmlWebpackPluginCommon
-            }),
-            new HtmlWebpackPlugin({
-                chunks: ['fullscreen'],
-                template: 'src/playground/index.ejs',
-                filename: 'fullscreen.html',
-                title: `${APP_NAME} - Run Scratch projects faster`,
-                ...htmlWebpackPluginCommon
-            }),
-            new HtmlWebpackPlugin({
-                chunks: ['embed'],
-                template: 'src/playground/embed.ejs',
-                filename: 'embed.html',
-                title: `Embedded Project - ${APP_NAME}`,
-                ...htmlWebpackPluginCommon
-            }),
-            new HtmlWebpackPlugin({
-                chunks: ['addon-settings'],
-                template: 'src/playground/simple.ejs',
-                filename: 'addons.html',
-                title: `Addon Settings - ${APP_NAME}`,
-                ...htmlWebpackPluginCommon
-            }),
-            new HtmlWebpackPlugin({
-                chunks: ['credits'],
-                template: 'src/playground/simple.ejs',
-                filename: 'credits.html',
-                title: `${APP_NAME} Credits`,
                 ...htmlWebpackPluginCommon
             }),
             new CopyWebpackPlugin({
@@ -248,59 +208,4 @@ module.exports = [
             })
         ])
     })
-].concat(
-    process.env.NODE_ENV === 'production' || process.env.BUILD_MODE === 'dist' ? (
-        // export as library
-        defaultsDeep({}, base, {
-            target: 'web',
-            entry: {
-                'scratch-gui': './src/index.js'
-            },
-            output: {
-                libraryTarget: 'umd',
-                filename: 'js/[name].js',
-                chunkFilename: 'js/[name].js',
-                path: path.resolve('dist'),
-                publicPath: `${STATIC_PATH}/`
-            },
-            externals: {
-                'react': 'react',
-                'react-dom': 'react-dom'
-            },
-            module: {
-                rules: base.module.rules.concat([
-                    {
-                        test: /\.(svg|png|wav|mp3|gif|jpg|woff2|hex)$/,
-                        loader: 'url-loader',
-                        options: {
-                            limit: 2048,
-                            outputPath: 'static/assets/',
-                            publicPath: `${STATIC_PATH}/assets/`,
-                            esModule: false
-                        }
-                    }
-                ])
-            },
-            plugins: base.plugins.concat([
-                new CopyWebpackPlugin({
-                    patterns: [
-                        {
-                            from: 'extension-worker.{js,js.map}',
-                            context: 'node_modules/scratch-vm/dist/web',
-                            noErrorOnMissing: true
-                        }
-                    ]
-                }),
-                // Include library JSON files for scratch-desktop to use for downloading
-                new CopyWebpackPlugin({
-                    patterns: [
-                        {
-                            from: 'src/lib/libraries/*.json',
-                            to: 'libraries',
-                            flatten: true
-                        }
-                    ]
-                })
-            ])
-        })) : []
-);
+];

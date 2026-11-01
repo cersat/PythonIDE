@@ -1,4 +1,5 @@
 import LazyScratchBlocks from './tw-lazy-scratch-blocks';
+import registerPyBlocks from './py/blocks';
 
 /**
  * Connect scratch blocks with the vm
@@ -7,6 +8,7 @@ import LazyScratchBlocks from './tw-lazy-scratch-blocks';
  */
 export default function (vm) {
     const ScratchBlocks = LazyScratchBlocks.get();
+    registerPyBlocks(ScratchBlocks);
     const jsonForMenuBlock = function (name, menuOptionsFn, colors, start) {
         return {
             message0: '%1',

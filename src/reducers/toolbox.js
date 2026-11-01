@@ -1,8 +1,9 @@
 const UPDATE_TOOLBOX = 'scratch-gui/toolbox/UPDATE_TOOLBOX';
-import makeToolboxXML from '../lib/make-toolbox-xml';
+import makePyToolboxXML from '../lib/py/toolbox';
+import {defaultBlockColors} from '../lib/themes';
 
 const initialState = {
-    toolboxXML: makeToolboxXML(true)
+    toolboxXML: makePyToolboxXML(defaultBlockColors)
 };
 
 const reducer = function (state, action) {

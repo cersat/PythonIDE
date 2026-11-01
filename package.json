@@ -1,7 +1,7 @@
 {
-  "name": "scratch-gui",
+  "name": "pythonide",
   "version": "3.2.37",
-  "description": "Graphical User Interface for creating and running Scratch 3.0 projects",
+  "description": "PythonIDE — блочная Python-IDE на основе TurboWarp, десктопное приложение",
   "author": "Massachusetts Institute of Technology",
   "license": "GPL-3.0",
   "homepage": "https://github.com/LLK/scratch-gui#readme",
@@ -9,20 +9,17 @@
     "type": "git",
     "url": "https://github.com/LLK/scratch-gui.git"
   },
-  "main": "./dist/scratch-gui.js",
+  "main": "electron/main.js",
   "scripts": {
     "build": "npm run clean && webpack --colors --bail",
     "clean": "rimraf ./build && mkdirp build && rimraf ./dist && mkdirp dist",
-    "deploy": "touch build/.nojekyll && gh-pages -t -d build -m \"[skip ci] Build for $(git log --pretty=format:%H -n1)\"",
-    "prepublish": "node scripts/prepublish.mjs",
-    "prune": "./prune-gh-pages.sh",
-    "i18n:push": "tx-push-src scratch-editor interface translations/en.json",
-    "i18n:src": "rimraf ./translations/messages/src && babel src > tmp.js && rimraf tmp.js && build-i18n-src ./translations/messages/src ./translations/",
     "start": "webpack-dev-server",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "eslint . --ext .js,.jsx",
     "test:unit": "node --import ./test/register-hooks.mjs --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"test/**/*.test.mjs\"",
-    "watch": "webpack --colors --watch"
+    "watch": "webpack --colors --watch",
+    "app": "npm run build && electron .",
+    "electron": "electron ."
   },
   "config": {
     "commitizen": {

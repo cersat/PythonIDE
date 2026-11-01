@@ -7,17 +7,10 @@ const PREFERS_DARK_QUERY = matchMedia('(prefers-color-scheme: dark)');
 const STORAGE_KEY = 'tw:theme';
 
 /**
+ * PythonIDE всегда в тёмной теме.
  * @returns {Theme} detected theme
  */
-const systemPreferencesTheme = () => {
-    if (PREFERS_HIGH_CONTRAST_QUERY && PREFERS_HIGH_CONTRAST_QUERY.matches) {
-        return Theme.highContrast;
-    }
-    if (PREFERS_DARK_QUERY && PREFERS_DARK_QUERY.matches) {
-        return Theme.dark;
-    }
-    return Theme.light;
-};
+const systemPreferencesTheme = () => Theme.dark;
 
 /**
  * @param {function} onChange callback; no guarantees about arguments

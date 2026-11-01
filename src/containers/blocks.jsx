@@ -1,7 +1,8 @@
 import bindAll from 'lodash.bindall';
 import debounce from 'lodash.debounce';
 import defaultsDeep from 'lodash.defaultsdeep';
-import makeToolboxXML from '../lib/make-toolbox-xml';
+import makePyToolboxXML from '../lib/py/toolbox';
+import {setWorkspace} from '../lib/py/workspace';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {intlShape, injectIntl, defineMessages} from 'react-intl';
@@ -20,7 +21,7 @@ import DropAreaHOC from '../lib/drop-area-hoc.jsx';
 import DragConstants from '../lib/drag-constants';
 import defineDynamicBlock from '../lib/define-dynamic-block';
 import {Theme} from '../lib/themes';
-import {injectExtensionBlockTheme, injectExtensionCategoryTheme} from '../lib/themes/blockHelpers';
+import {injectExtensionBlockTheme} from '../lib/themes/blockHelpers';
 
 import {connect} from 'react-redux';
 import {updateToolbox} from '../reducers/toolbox';
@@ -166,6 +167,7 @@ class Blocks extends React.Component {
         );
         this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
         AddonHooks.blocklyWorkspace = this.workspace;
+        setWorkspace(this.workspace);
 
         // Register buttons under new callback keys for creating variables,
         // lists, and procedures from extensions.
@@ -437,30 +439,7 @@ class Blocks extends React.Component {
         this.workspace.reportValue(data.id, data.value);
     }
     getToolboxXML () {
-        // Use try/catch because this requires digging pretty deep into the VM
-        // Code inside intentionally ignores several error situations (no stage, etc.)
-        // Because they would get caught by this try/catch
-        try {
-            let {editingTarget: target, runtime} = this.props.vm;
-            const stage = runtime.getTargetForStage();
-            if (!target) target = stage; // If no editingTarget, use the stage
-
-            const stageCostumes = stage.getCostumes();
-            const targetCostumes = target.getCostumes();
-            const targetSounds = target.getSounds();
-            const dynamicBlocksXML = injectExtensionCategoryTheme(
-                this.props.vm.runtime.getBlocksXML(target),
-                this.props.theme
-            );
-            return makeToolboxXML(false, target.isStage, target.id, dynamicBlocksXML,
-                targetCostumes[targetCostumes.length - 1].name,
-                stageCostumes[stageCostumes.length - 1].name,
-                targetSounds.length > 0 ? targetSounds[targetSounds.length - 1].name : '',
-                this.props.theme.getBlockColors()
-            );
-        } catch {
-            return null;
-        }
+        return makePyToolboxXML(this.props.theme.getBlockColors());
     }
     onWorkspaceUpdate (data) {
         // When we change sprites, update the toolbox to have the new sprite's blocks
