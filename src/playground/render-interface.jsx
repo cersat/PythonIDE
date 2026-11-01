@@ -57,9 +57,9 @@ const handleClickAddonSettings = addonId => {
 
 const messages = defineMessages({
     defaultTitle: {
-        defaultMessage: 'Run Scratch projects faster',
+        defaultMessage: 'Блочная Python-IDE',
         description: 'Title of homepage',
-        id: 'tw.guiDefaultTitle'
+        id: 'pyide.guiDefaultTitle'
     }
 });
 
